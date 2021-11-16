@@ -9,7 +9,8 @@ import json
 import logging
 import copy
 import uuid
-
+import _scproxy
+# Workaround fix https://github.com/pymssql/pymssql/issues/705
 import pymssql
 
 import singer
@@ -68,11 +69,12 @@ BYTES_FOR_INTEGER_TYPE = {
     "smallint": 2,
     "mediumint": 3,
     "int": 4,
-    "real": 4,
     "bigint": 8,
 }
 
-FLOAT_TYPES = set(["float", "double", "money"])
+FLOAT_TYPES = set(["float", "double", "real"])
+
+DECIMAL_TYPES = set(["decimal", "number", "money"])
 
 DATETIME_TYPES = set(
     ["datetime", "timestamp", "date", "time", "smalldatetime"])
@@ -102,9 +104,9 @@ def schema_for_column(c):
 
     elif data_type in FLOAT_TYPES:
         result.type = ["null", "number"]
-        result.multipleOf = 10 ** (0 - (c.numeric_scale or 6))
+        result.multipleOf = 10 ** (0 - (c.numeric_scale or 17))
 
-    elif data_type in ["decimal", "numeric"]:
+    elif data_type in DECIMAL_TYPES:
         result.type = ["null", "number"]
         result.multipleOf = 10 ** (0 - c.numeric_scale)
         return result
@@ -124,8 +126,11 @@ def schema_for_column(c):
         result.type = ["null", "object"]
 
     else:
-        result = Schema(None, inclusion="unsupported",
-                        description="Unsupported column type",)
+        result = Schema(
+            None,
+            inclusion="unsupported",
+            description="Unsupported column type",
+        )
     return result
 
 
