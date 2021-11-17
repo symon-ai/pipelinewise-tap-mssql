@@ -17,7 +17,8 @@ LOGGER = singer.get_logger()
 def escape(string):
     if "`" in string:
         raise Exception(
-            "Can't escape identifier {} because it contains a double quote".format(string)
+            "Can't escape identifier {} because it contains a double quote".format(
+                string)
         )
     return '"' + string + '"'
 
@@ -83,10 +84,8 @@ def generate_select_sql(catalog_entry, columns):
     escaped_table = escape(catalog_entry.table)
     escaped_columns = [escape(c) for c in columns]
 
-    select_sql = "SELECT {} FROM {}.{}".format(",".join(escaped_columns), escaped_db, escaped_table)
-
-    # escape percent signs
-    select_sql = select_sql.replace("%", "%%")
+    select_sql = "SELECT {} FROM {}.{}".format(
+        ",".join(escaped_columns), escaped_db, escaped_table)
     return select_sql
 
 
@@ -139,7 +138,8 @@ def whitelist_bookmark_keys(bookmark_key_set, tap_stream_id, state):
 
 
 def sync_query(cursor, catalog_entry, state, select_sql, columns, stream_version, params):
-    replication_key = singer.get_bookmark(state, catalog_entry.tap_stream_id, "replication_key")
+    replication_key = singer.get_bookmark(
+        state, catalog_entry.tap_stream_id, "replication_key")
 
     # query_string = cursor.mogrify(select_sql, params)
 
@@ -195,7 +195,8 @@ def sync_query(cursor, catalog_entry, state, select_sql, columns, stream_version
                         record_message.record[replication_key],
                     )
             if rows_saved % 1000 == 0:
-                singer.write_message(singer.StateMessage(value=copy.deepcopy(state)))
+                singer.write_message(singer.StateMessage(
+                    value=copy.deepcopy(state)))
 
             row = cursor.fetchone()
 
