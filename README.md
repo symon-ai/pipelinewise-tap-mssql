@@ -23,6 +23,7 @@ installation instructions for [Mac](http://docs.python-guide.org/en/latest/start
 [Ubuntu](https://www.digitalocean.com/community/tutorials/how-to-install-python-3-and-set-up-a-local-programming-environment-on-ubuntu-16-04).
 
 It's recommended to use a virtualenv:
+[Update: pipelinewise-tap-mssql package not found in pip]
 
 ```bash
   python3 -m venv venv
@@ -64,17 +65,18 @@ Create a config file containing the database connection credentials, e.g.:
   "host": "localhost",
   "port": "3306",
   "user": "root",
-  "password": "password"
+  "password": "password",
+  "tables": "animals,table2"
 }
 ```
 
 These are the same basic configuration properties used by the mssql command-line
-client (`mssql`).
+client (`mssql`) and `tables` param to filter by given tables.
 
 ### Discovery mode
 
-The tap can be invoked in discovery mode to find the available tables and
-columns in the database:
+The tap can be invoked in discovery mode to find the given tables in config and
+their columns in the database:
 
 ```bash
 $ tap-mssql --config config.json --discover
@@ -95,27 +97,18 @@ source table directly corresponds to a Singer stream.
         "properties": {
           "name": {
             "inclusion": "available",
-            "type": [
-              "null",
-              "string"
-            ],
+            "type": ["null", "string"],
             "maxLength": 255
           },
           "id": {
             "inclusion": "automatic",
             "minimum": -2147483648,
             "maximum": 2147483647,
-            "type": [
-              "null",
-              "integer"
-            ]
+            "type": ["null", "integer"]
           },
           "likes_getting_petted": {
             "inclusion": "available",
-            "type": [
-              "null",
-              "boolean"
-            ]
+            "type": ["null", "boolean"]
           }
         }
       },
@@ -124,39 +117,28 @@ source table directly corresponds to a Singer stream.
           "breadcrumb": [],
           "metadata": {
             "row-count": 3,
-            "table-key-properties": [
-              "id"
-            ],
+            "table-key-properties": ["id"],
             "database-name": "example_db",
             "selected-by-default": false,
-            "is-view": false,
+            "is-view": false
           }
         },
         {
-          "breadcrumb": [
-            "properties",
-            "id"
-          ],
+          "breadcrumb": ["properties", "id"],
           "metadata": {
             "sql-datatype": "int(11)",
             "selected-by-default": true
           }
         },
         {
-          "breadcrumb": [
-            "properties",
-            "name"
-          ],
+          "breadcrumb": ["properties", "name"],
           "metadata": {
             "sql-datatype": "varchar(255)",
             "selected-by-default": true
           }
         },
         {
-          "breadcrumb": [
-            "properties",
-            "likes_getting_petted"
-          ],
+          "breadcrumb": ["properties", "likes_getting_petted"],
           "metadata": {
             "sql-datatype": "tinyint(1)",
             "selected-by-default": true
@@ -167,7 +149,6 @@ source table directly corresponds to a Singer stream.
     }
   ]
 }
-
 ```
 
 ### Field selection
@@ -194,9 +175,7 @@ information, see [Replication methods and state file](#replication-methods-and-s
     "breadcrumb": [],
     "metadata": {
       "row-count": 3,
-      "table-key-properties": [
-        "id"
-      ],
+      "table-key-properties": ["id"],
       "database-name": "example_db",
       "selected-by-default": false,
       "is-view": false,
@@ -205,10 +184,7 @@ information, see [Replication methods and state file](#replication-methods-and-s
     }
   },
   {
-    "breadcrumb": [
-      "properties",
-      "id"
-    ],
+    "breadcrumb": ["properties", "id"],
     "metadata": {
       "sql-datatype": "int(11)",
       "selected-by-default": true,
@@ -216,10 +192,7 @@ information, see [Replication methods and state file](#replication-methods-and-s
     }
   },
   {
-    "breadcrumb": [
-      "properties",
-      "name"
-    ],
+    "breadcrumb": ["properties", "name"],
     "metadata": {
       "sql-datatype": "varchar(255)",
       "selected-by-default": true,
@@ -227,10 +200,7 @@ information, see [Replication methods and state file](#replication-methods-and-s
     }
   },
   {
-    "breadcrumb": [
-      "properties",
-      "likes_getting_petted"
-    ],
+    "breadcrumb": ["properties", "likes_getting_petted"],
     "metadata": {
       "sql-datatype": "tinyint(1)",
       "selected-by-default": true,
