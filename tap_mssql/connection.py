@@ -2,7 +2,7 @@
 
 import backoff
 # Workaround fix https://github.com/pymssql/pymssql/issues/705
-import _scproxy
+#import _scproxy
 import pymssql
 
 import singer

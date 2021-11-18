@@ -9,7 +9,7 @@ import json
 import logging
 import copy
 import uuid
-import _scproxy
+#import _scproxy
 # Workaround fix https://github.com/pymssql/pymssql/issues/705
 import pymssql
 
