@@ -2,7 +2,7 @@
 
 import backoff
 # Workaround fix https://github.com/pymssql/pymssql/issues/705
-#import _scproxy
+# import _scproxy #caused "Module not found" error while running in linux container
 import pymssql
 
 import singer
