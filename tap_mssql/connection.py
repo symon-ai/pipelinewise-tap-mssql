@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 
 import backoff
-
+# Workaround fix https://github.com/pymssql/pymssql/issues/705
+# import _scproxy #caused "Module not found" error while running in linux container
 import pymssql
 
 import singer
@@ -36,6 +37,7 @@ class MSSQLConnection(pymssql.Connection):
             "database": config["database"],
             "charset": "utf8",
             "port": config.get("port", "1433"),
+            "tds_version": config.get("tds_version", "8.0"),
         }
         conn = pymssql._mssql.connect(**args)
         super().__init__(conn, False, True)

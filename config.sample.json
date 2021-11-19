@@ -1,0 +1,8 @@
+{
+  "host": "db-host-address",
+  "port": "1433",
+  "user": "admin",
+  "password": "password-placeholder",
+  "database": "tempdb",
+  "tables": "seller_churn"
+}
