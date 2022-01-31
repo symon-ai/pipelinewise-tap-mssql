@@ -331,7 +331,7 @@ def desired_columns(selected, table_schema):
             not_selected_but_automatic,
         )
 
-    return selected.intersection(available).union(automatic)
+    return sorted(selected.intersection(available).union(automatic), key = list(table_schema.properties.keys()).index)
 
 
 def is_valid_currently_syncing_stream(selected_stream, state):
