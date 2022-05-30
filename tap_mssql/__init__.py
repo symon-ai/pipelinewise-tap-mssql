@@ -86,6 +86,8 @@ def schema_for_column(c):
     """Returns the Schema object for the given Column."""
     data_type = c.data_type.lower()
 
+    LOGGER.info("datatype: " + str(data_type))
+
     inclusion = "available"
 
     if c.is_primary_key == 1:
@@ -124,6 +126,10 @@ def schema_for_column(c):
 
     elif data_type in VARIANT_TYPES:
         result.type = ["null", "object"]
+
+    elif data_type == "year":
+        result.type = ["null", "number"]
+
 
     else:
         result = Schema(
