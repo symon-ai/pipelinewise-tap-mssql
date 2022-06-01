@@ -125,10 +125,6 @@ def schema_for_column(c):
     elif data_type in VARIANT_TYPES:
         result.type = ["null", "object"]
 
-    elif data_type == "year":
-        result.type = ["null", "number"]
-
-
     else:
         result = Schema(
             None,
