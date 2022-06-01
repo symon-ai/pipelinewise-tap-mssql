@@ -74,10 +74,10 @@ BYTES_FOR_INTEGER_TYPE = {
 
 FLOAT_TYPES = set(["float", "double", "real"])
 
-DECIMAL_TYPES = set(["decimal", "number", "money"])
+DECIMAL_TYPES = set(["decimal", "number", "money", "smallmoney"])
 
 DATETIME_TYPES = set(
-    ["datetime", "timestamp", "date", "time", "smalldatetime"])
+    ["datetime", "timestamp", "date", "time", "smalldatetime", "datetime2", "datetimeoffset"])
 
 VARIANT_TYPES = set(["json"])
 
