@@ -86,8 +86,6 @@ def schema_for_column(c):
     """Returns the Schema object for the given Column."""
     data_type = c.data_type.lower()
 
-    LOGGER.info("datatype: " + str(data_type))
-
     inclusion = "available"
 
     if c.is_primary_key == 1:
@@ -615,17 +613,13 @@ def main_impl():
     args = utils.parse_args(REQUIRED_CONFIG_KEYS)
     mssql_conn = MSSQLConnection(args.config)
     log_server_params(mssql_conn)
-    LOGGER.info("YI HERE")
 
     if args.discover:
-        LOGGER.info("YI DISCOVER")
         do_discover(mssql_conn, args.config)
     elif args.catalog:
-        LOGGER.info("YI CATALOG")
         state = args.state or {}
         do_sync(mssql_conn, args.config, args.catalog, state)
     elif args.properties:
-        LOGGER.info("YI FROM PROPERTIES")
         catalog = Catalog.from_dict(args.properties)
         state = args.state or {}
         do_sync(mssql_conn, args.config, catalog, state)
