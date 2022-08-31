@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "tap-mssql"
+version = "1.0.4"
+description = "Singer.io tap for extracting data from SQL Server - PipelineWise compatible"
+authors = ["Stitch"]
+repository = "https://github.com/wintersrd/pipelinewise-tap-mssql"
+classifiers = ["License :: OSI Approved :: GNU Affero General Public License v3","Programming Language :: Python :: 3 :: Only"]
+
+[tool.poetry.dependencies]
+python = "^3.7"
+attrs = "16.3.0"
+pendulum = "1.2.0"
+singer-python = "~5.3.1"
+pymssql = "2.2.1"
+backoff = "1.3.2"
+
+[tool.poetry.dev-dependencies]
+
+[tool.poetry.scripts]
+tap-mssql = "tap_mssql:main"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
