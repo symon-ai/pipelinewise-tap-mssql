@@ -18,25 +18,27 @@ database.
 
 ### Install
 
-First, make sure Python 3 is installed on your system or follow these
-installation instructions for [Mac](http://docs.python-guide.org/en/latest/starting/install3/osx/) or
-[Ubuntu](https://www.digitalocean.com/community/tutorials/how-to-install-python-3-and-set-up-a-local-programming-environment-on-ubuntu-16-04).
+Ensure poetry is installed on your machine. 
 
-It's recommended to use a virtualenv:
-[Update: pipelinewise-tap-mssql package not found in pip]
-
-```bash
-  python3 -m venv venv
-  pip install pipelinewise-tap-mssql
+- This command will return the installed version of poetry if it is installed.
+```
+poetry --version
 ```
 
-or
+- If not, install poetry using the following commands (from https://python-poetry.org/docs/#installation):
+```
+curl -sSL https://install.python-poetry.org | python3 -
+PATH=~/.local/bin:$PATH
+```
 
-```bash
-  python3 -m venv venv
-  . venv/bin/activate
-  pip install --upgrade pip
-  pip install .
+Within the `tap-mssql` directory, install dependencies:
+```
+poetry install
+```
+
+Then run the tap:
+```
+poetry run tap-mssql <options>
 ```
 
 ### Have a source database
