@@ -74,7 +74,7 @@ BYTES_FOR_INTEGER_TYPE = {
 
 FLOAT_TYPES = set(["float", "double", "real"])
 
-DECIMAL_TYPES = set(["decimal", "number", "money", "smallmoney"])
+DECIMAL_TYPES = set(["decimal", "number", "money", "smallmoney", "numeric"])
 
 DATETIME_TYPES = set(
     ["datetime", "timestamp", "date", "time", "smalldatetime", "datetime2", "datetimeoffset"])
