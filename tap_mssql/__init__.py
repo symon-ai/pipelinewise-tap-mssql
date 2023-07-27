@@ -19,7 +19,7 @@ import singer.schema
 
 from singer import bookmarks
 from singer import metadata
-from singer import utils
+from singer import utils as singer_utils
 from singer.schema import Schema
 from singer.catalog import Catalog, CatalogEntry
 
@@ -604,7 +604,7 @@ def log_server_params(mssql_conn):
 
 
 def main_impl():
-    args = utils.parse_args(REQUIRED_CONFIG_KEYS)
+    args = singer_utils.parse_args(REQUIRED_CONFIG_KEYS)
     mssql_conn = MSSQLConnection(args.config)
     log_server_params(mssql_conn)
 
