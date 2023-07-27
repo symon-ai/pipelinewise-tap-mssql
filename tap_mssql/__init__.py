@@ -28,6 +28,7 @@ import tap_mssql.sync_strategies.full_table as full_table
 import tap_mssql.sync_strategies.incremental as incremental
 
 from tap_mssql.connection import connect_with_backoff, MSSQLConnection
+from tap_mssql.utils import raise_error
 
 
 Column = collections.namedtuple(
@@ -338,7 +339,7 @@ def is_valid_currently_syncing_stream(selected_stream, state):
     return True
 
 
-def resolve_catalog(discovered_catalog, streams_to_sync):
+def resolve_catalog(discovered_catalog, streams_to_sync, config):
     result = Catalog(streams=[])
 
     # Iterate over the streams in the input catalog and match each one up
@@ -352,12 +353,11 @@ def resolve_catalog(discovered_catalog, streams_to_sync):
         database_name = common.get_database_name(catalog_entry)
 
         if not discovered_table:
-            LOGGER.warning(
-                "Database %s table %s was selected but does not exist",
-                database_name,
-                catalog_entry.table,
-            )
-            continue
+            error_info = {
+                'message': f'Database {database_name} table {catalog_entry.table} was selected but does not exist.',
+                'code': 'MsSqlTableNotFound'
+            }
+            raise_error(error_info, config)
 
         selected = {
             k
@@ -455,7 +455,7 @@ def get_non_binlog_streams(mssql_conn, catalog, config, state):
         # prioritize streams that have not been processed
         streams_to_sync = ordered_streams
 
-    return resolve_catalog(discovered, streams_to_sync)
+    return resolve_catalog(discovered, streams_to_sync, config)
 
 
 def get_binlog_streams(mssql_conn, catalog, config, state):
@@ -471,7 +471,7 @@ def get_binlog_streams(mssql_conn, catalog, config, state):
             (), {}).get("replication-method")
         stream_state = state.get("bookmarks", {}).get(stream.tap_stream_id)
 
-    return resolve_catalog(discovered, binlog_streams)
+    return resolve_catalog(discovered, binlog_streams, config)
 
 
 def write_schema_message(catalog_entry, bookmark_properties=[]):
@@ -530,10 +530,8 @@ def sync_non_binlog_streams(mssql_conn, non_binlog_catalog, config, state):
         columns = list(catalog_entry.schema.properties.keys())
 
         if not columns:
-            LOGGER.warning(
-                "There are no columns selected for stream %s, skipping it.", catalog_entry.stream
-            )
-            continue
+            error_info = {'message': f'There are no columns selected for stream {catalog_entry.stream}.', 'code': 'MsSqlEmptyData'}
+            raise_error(error_info, config)
 
         state = singer.set_currently_syncing(
             state, catalog_entry.tap_stream_id)

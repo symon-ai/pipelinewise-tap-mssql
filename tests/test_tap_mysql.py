@@ -8,9 +8,9 @@ import singer.metadata
 from tap_mysql.connection import connect_with_backoff
 
 try:
-    import tests.utils as test_utils
+    import tests.test_utils as test_utils
 except ImportError:
-    import utils as test_utils
+    import test_utils
 
 import tap_mysql.sync_strategies.binlog as binlog
 import tap_mysql.sync_strategies.common as common
