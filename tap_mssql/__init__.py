@@ -355,7 +355,7 @@ def resolve_catalog(discovered_catalog, streams_to_sync, config):
         if not discovered_table:
             error_info = {
                 'message': f'Database {database_name} table {catalog_entry.table} was selected but does not exist.',
-                'code': 'MsSqlTableNotFound'
+                'code': 'mssql.TableNotFound'
             }
             raise_error(error_info, config)
 
@@ -530,7 +530,7 @@ def sync_non_binlog_streams(mssql_conn, non_binlog_catalog, config, state):
         columns = list(catalog_entry.schema.properties.keys())
 
         if not columns:
-            error_info = {'message': f'There are no columns selected for stream {catalog_entry.stream}.', 'code': 'MsSqlEmptyData'}
+            error_info = {'message': f'There are no columns selected for stream {catalog_entry.stream}.', 'code': 'mssql.EmptyData'}
             raise_error(error_info, config)
 
         state = singer.set_currently_syncing(
