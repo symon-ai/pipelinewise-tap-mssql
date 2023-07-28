@@ -358,7 +358,7 @@ def resolve_catalog(discovered_catalog, streams_to_sync):
         database_name = common.get_database_name(catalog_entry)
 
         if not discovered_table:
-            raise SymonException(f'Database {database_name} table {catalog_entry.table} was selected but does not exist.', 'odbc.TableNotFound')
+            raise SymonException(f'Database "{database_name}" table "{catalog_entry.table}" was selected but does not exist.', 'odbc.TableNotFound')
 
         selected = {
             k
@@ -530,7 +530,7 @@ def sync_non_binlog_streams(mssql_conn, non_binlog_catalog, config, state):
         columns = list(catalog_entry.schema.properties.keys())
 
         if not columns:
-            raise SymonException(f'There are no columns selected for stream {catalog_entry.stream}.', 'odbc.EmptyData')
+            raise SymonException(f'There are no columns selected for stream "{catalog_entry.stream}".', 'odbc.EmptyData')
 
         state = singer.set_currently_syncing(
             state, catalog_entry.tap_stream_id)
