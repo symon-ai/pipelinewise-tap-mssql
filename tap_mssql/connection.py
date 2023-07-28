@@ -43,13 +43,17 @@ class MSSQLConnection(pymssql.Connection):
         try:
             conn = pymssql._mssql.connect(**args)
         except pymssql._mssql.MSSQLDatabaseException as e:
+            message = str(e)
             # pymssql throws same error for both wrong credentials and wrong database
-            if f"Login failed for user '{config['user']}'" in str(e):
+            if f"Login failed for user '{config['user']}'" in message:
                 raise SymonException('The username and password provided are incorrect. Please try again.', 'odbc.AuthenticationFailed')
-            if "Adaptive Server is unavailable or does not exist" in str(e) and "timed out" in str(e):
-                raise SymonException('Timed out connecting to database. Please ensure all the form values are correct.', 'odbc.ConnectionTimeout')
+            if "Adaptive Server is unavailable or does not exist" in message:
+                if "timed out" in message:
+                    raise SymonException('Timed out connecting to database. Please ensure all the form values are correct.', 'odbc.ConnectionTimeout')
+                raise SymonException(f'The host "{config["host"]}" was not found. Please check the host name and try again.', 'odbc.HostNotFound')
             raise
         except pymssql._mssql.MSSQLDriverException as e:
+            # using invalid url like 'asdas' for host gives this error
             if "Connection to the database failed for an unknown reason" in str(e):
                 raise SymonException(f'The host "{config["host"]}" was not found. Please check the host name and try again.', 'odbc.HostNotFound')
             raise
