@@ -358,12 +358,7 @@ def resolve_catalog(discovered_catalog, streams_to_sync):
         database_name = common.get_database_name(catalog_entry)
 
         if not discovered_table:
-            LOGGER.warning(
-                "Database %s table %s was selected but does not exist",
-                database_name,
-                catalog_entry.table,
-            )
-            continue
+            raise SymonException(f'Database "{database_name}" table "{catalog_entry.table}" was selected but does not exist.', 'odbc.TableNotFound')
 
         selected = {
             k
@@ -424,7 +419,6 @@ def get_non_binlog_streams(mssql_conn, catalog, config, state):
         # if stream_metadata.table in ["aagaggpercols", "aagaggdef"]:
         for k, v in stream_metadata.get((), {}).items():
             LOGGER.info(f"{k}: {v}")
-            # LOGGER.info(stream_metadata.get((), {}).get("table-key-properties"))
         replication_method = stream_metadata.get(
             (), {}).get("replication-method")
         stream_state = state.get("bookmarks", {}).get(stream.tap_stream_id)
@@ -536,10 +530,7 @@ def sync_non_binlog_streams(mssql_conn, non_binlog_catalog, config, state):
         columns = list(catalog_entry.schema.properties.keys())
 
         if not columns:
-            LOGGER.warning(
-                "There are no columns selected for stream %s, skipping it.", catalog_entry.stream
-            )
-            continue
+            raise SymonException(f'There are no columns selected for stream "{catalog_entry.stream}".', 'odbc.EmptyData')
 
         state = singer.set_currently_syncing(
             state, catalog_entry.tap_stream_id)
