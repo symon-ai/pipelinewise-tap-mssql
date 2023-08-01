@@ -49,13 +49,13 @@ class MSSQLConnection(pymssql.Connection):
                 raise SymonException('The username and password provided are incorrect. Please try again.', 'odbc.AuthenticationFailed')
             if "Adaptive Server is unavailable or does not exist" in message:
                 if "timed out" in message:
-                    raise SymonException('Timed out connecting to database. Please ensure all the form values are correct.', 'odbc.ConnectionTimeout')
-                raise SymonException(f'Sorry, we couldn\'t connect to the host "{config["host"]}". Please ensure all the form values are correct.', 'odbc.ConnectionFailed')
+                    raise SymonException('Timed out connecting to database. Please ensure all the connection form values are correct.', 'odbc.ConnectionTimeout')
+                raise SymonException(f'Sorry, we couldn\'t connect to the host "{config["host"]}". Please ensure all the connection form values are correct.', 'odbc.ConnectionFailed')
             raise
         except pymssql._mssql.MSSQLDriverException as e:
             # invalid host url like 'asd' raises this error, but it might not be the only reason for this error
             if "Connection to the database failed for an unknown reason" in str(e):
-                raise SymonException(f'Sorry, we couldn\'t connect to the host "{config["host"]}". Please ensure all the form values are correct.', 'odbc.ConnectionFailed')
+                raise SymonException(f'Sorry, we couldn\'t connect to the host "{config["host"]}". Please ensure all the connection form values are correct.', 'odbc.ConnectionFailed')
             raise
 
         super().__init__(conn, False, True)
