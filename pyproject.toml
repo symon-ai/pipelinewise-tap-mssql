@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "tap-mssql"
-version = "1.0.7"
+version = "1.0.8"
 description = "Singer.io tap for extracting data from SQL Server - PipelineWise compatible"
 authors = ["Stitch"]
 repository = "https://github.com/wintersrd/pipelinewise-tap-mssql"
