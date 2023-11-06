@@ -46,7 +46,7 @@ class MSSQLConnection(pymssql.Connection):
             message = str(e)
             # pymssql throws same error for both wrong credentials and wrong database
             if f"Login failed for user '{config['user']}'" in message:
-                raise SymonException('The username and password provided are incorrect. Please try again.', 'odbc.AuthenticationFailed')
+                raise SymonException('The username or password provided is incorrect. Please check and try again.', 'odbc.AuthenticationFailed')
             if "Adaptive Server is unavailable or does not exist" in message:
                 if "timed out" in message:
                     raise SymonException('Timed out connecting to database. Please ensure all the connection form values are correct.', 'odbc.ConnectionTimeout')
