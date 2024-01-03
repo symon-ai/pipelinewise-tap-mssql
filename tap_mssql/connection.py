@@ -42,6 +42,7 @@ class MSSQLConnection(pymssql.Connection):
         }
         try:
             conn = pymssql._mssql.connect(**args)
+            conn.query_timeout = 60
         except pymssql._mssql.MSSQLDatabaseException as e:
             message = str(e)
             # pymssql throws same error for both wrong credentials and wrong database
