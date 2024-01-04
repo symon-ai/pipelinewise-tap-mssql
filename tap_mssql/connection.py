@@ -42,7 +42,10 @@ class MSSQLConnection(pymssql.Connection):
         }
         try:
             conn = pymssql._mssql.connect(**args)
-            conn.query_timeout = 60
+            # default query timeout is set to 0, which means to wait indefinitely for results.
+            # two cases for query timing out, the query execution is taking longer time than the query_timeout or the connection is lost.
+            # for now, set the query_timeout for 1 hour
+            conn.query_timeout = 3600
         except pymssql._mssql.MSSQLDatabaseException as e:
             message = str(e)
             # pymssql throws same error for both wrong credentials and wrong database
