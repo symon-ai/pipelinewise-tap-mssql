@@ -10,6 +10,7 @@ import uuid
 import singer.metrics as metrics
 from singer import metadata
 from singer import utils
+from datetime import datetime
 
 LOGGER = singer.get_logger()
 
@@ -144,9 +145,19 @@ def sync_query(cursor, catalog_entry, state, select_sql, columns, stream_version
     # query_string = cursor.mogrify(select_sql, params)
 
     time_extracted = utils.now()
+    print("---------here goes the start time---------")
+    print(datetime.now())
     cursor.execute(select_sql, params)
+    
+    print("---------here goes the end time---------")
+    print(datetime.now())
 
+    print("-----------------fetch the first one-----------------")
     row = cursor.fetchone()
+    print(row)
+    print("-----------------done-----------------")
+    print(datetime.now())
+    raise Exception("stop here")
     rows_saved = 0
 
     database_name = get_database_name(catalog_entry)
