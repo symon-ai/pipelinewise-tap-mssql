@@ -1,13 +1,9 @@
 name: Veracode Static Scan
 
 on:
-  pull_request_target:
-    branches:
-      - master
-    types:
-      - opened
-      - reopened
-      - synchronize
+  schedule:
+    # Run this at 10:00 AM UTC every Sunday, https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#schedule
+    - cron: '0 10 * * SUN'
 
   workflow_dispatch:
 
@@ -20,15 +16,15 @@ jobs:
       - name: Zip
         uses: montudor/action-zip@v1
         with:
-          args: zip -qq -r symon-package-tap-mssql.zip .
+          args: zip -qq -r ELT_tap-mssql.zip .
       - name: Get timestamp
         run: echo TIMESTAMP=$(date +%Y-%m-%d_%H:%M:%S) >> $GITHUB_ENV
       - name: Veracode Upload And Scan
         uses: veracode/veracode-uploadandscan-action@0.2.6
         with:
           appname: ELT_tap-mssql
-          createprofile: false
-          filepath: ./symon-package-tap-mssql.zip
+          createprofile: true
+          filepath: ./ELT_tap-mssql.zip
           version: ${{ env.TIMESTAMP }}
           vid: ${{ secrets.VERACODE_API_KEY_ID }}
           vkey: ${{ secrets.VERACODE_API_KEY_SECRET }}
